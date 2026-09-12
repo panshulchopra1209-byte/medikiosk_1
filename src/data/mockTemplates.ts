@@ -1,0 +1,836 @@
+/**
+ * MediKiosk Mock Data, Indian Clinical Ontologies, and Sample Document Templates
+ */
+
+import type {
+  LanguageOption,
+  DigitizedDocument,
+  OPDQueueItem,
+  ClinicalMode,
+} from '../types.ts';
+
+export const SUPPORTED_LANGUAGES: LanguageOption[] = [
+  { code: 'hi', label: 'Hindi', nativeLabel: 'हिन्दी' },
+  { code: 'en', label: 'English', nativeLabel: 'English' },
+  { code: 'bn', label: 'Bengali', nativeLabel: 'বাংলা' },
+  { code: 'ta', label: 'Tamil', nativeLabel: 'தமிழ்' },
+  { code: 'te', label: 'Telugu', nativeLabel: 'తెలుగు' },
+  { code: 'mr', label: 'Marathi', nativeLabel: 'मराठी' },
+  { code: 'gu', label: 'Gujarati', nativeLabel: 'ગુજરાતી' },
+  { code: 'pa', label: 'Punjabi', nativeLabel: 'ਪੰਜਾਬੀ' },
+];
+
+export interface HospitalDepartmentItem {
+  id: string;
+  name: string;
+  mode: ClinicalMode;
+  iconType: 'stethoscope' | 'heart' | 'wind' | 'flame' | 'bone' | 'brain' | 'baby' | 'leaf' | 'droplets' | 'eye';
+  branchLabel: string;
+  subtitle: string;
+  badgeBg: string;
+  badgeText: string;
+}
+
+export const HOSPITAL_DEPARTMENTS: HospitalDepartmentItem[] = [
+  {
+    id: 'gen_med',
+    name: 'General Medicine / आंतरिक चिकित्सा',
+    mode: 'allopathy',
+    iconType: 'stethoscope',
+    branchLabel: 'General & Internal',
+    subtitle: 'Fever, infections, diabetes, BP & multisystem health',
+    badgeBg: 'bg-[#EBF1EC]',
+    badgeText: 'text-[#3E5B47]',
+  },
+  {
+    id: 'cardio',
+    name: 'Cardiology / हृदय रोग',
+    mode: 'allopathy',
+    iconType: 'heart',
+    branchLabel: 'Heart & Vascular',
+    subtitle: 'Chest heaviness, angina, ECG, palpitations & vascular',
+    badgeBg: 'bg-[#FAEEEA]',
+    badgeText: 'text-[#BA3C2A]',
+  },
+  {
+    id: 'pulmo',
+    name: 'Pulmonology & Chest / श्वसन रोग',
+    mode: 'allopathy',
+    iconType: 'wind',
+    branchLabel: 'Lungs & Breathing',
+    subtitle: 'Asthma, chronic cough, breathlessness & allergy',
+    badgeBg: 'bg-[#EBF3F8]',
+    badgeText: 'text-[#2D5A7A]',
+  },
+  {
+    id: 'gastro',
+    name: 'Gastroenterology / उदर व यकृत रोग',
+    mode: 'allopathy',
+    iconType: 'flame',
+    branchLabel: 'Stomach & Liver',
+    subtitle: 'Abdominal pain, acidity, digestion, jaundice & GI tract',
+    badgeBg: 'bg-[#FAF4E8]',
+    badgeText: 'text-[#9E7324]',
+  },
+  {
+    id: 'ortho',
+    name: 'Orthopaedics / अस्थि रोग',
+    mode: 'allopathy',
+    iconType: 'bone',
+    branchLabel: 'Bones & Joints',
+    subtitle: 'Knee arthritis, fractures, spine stiffness & back pain',
+    badgeBg: 'bg-[#F2ECE4]',
+    badgeText: 'text-[#635345]',
+  },
+  {
+    id: 'neuro',
+    name: 'Neurology / तंत्रिका व मस्तिष्क रोग',
+    mode: 'allopathy',
+    iconType: 'brain',
+    branchLabel: 'Brain & Nerves',
+    subtitle: 'Headache, migraines, tremors, numbness & stroke care',
+    badgeBg: 'bg-[#F1EEF8]',
+    badgeText: 'text-[#5B4687]',
+  },
+  {
+    id: 'pediatrics',
+    name: 'Pediatrics / बाल रोग विभाग',
+    mode: 'allopathy',
+    iconType: 'baby',
+    branchLabel: 'Child Health',
+    subtitle: 'Infant care, childhood fever, growth & immunizations',
+    badgeBg: 'bg-[#F9ECEB]',
+    badgeText: 'text-[#A0453D]',
+  },
+  {
+    id: 'ayush_kaya',
+    name: 'Kayachikitsa / कायचिकित्सा (आयुर्वेद)',
+    mode: 'ayush',
+    iconType: 'leaf',
+    branchLabel: 'Ayurvedic Medicine',
+    subtitle: 'Prakriti, Agni balance, Dosha imbalance & Rasayana',
+    badgeBg: 'bg-[#EBF1EC]',
+    badgeText: 'text-[#365342]',
+  },
+  {
+    id: 'ayush_pancha',
+    name: 'Panchakarma / पंचकर्म विभाग',
+    mode: 'ayush',
+    iconType: 'droplets',
+    branchLabel: 'Detox & Rejuvenation',
+    subtitle: 'Vamana, Virechana, Basti, Nasya & Shirodhara therapy',
+    badgeBg: 'bg-[#E6F3EE]',
+    badgeText: 'text-[#2D6A53]',
+  },
+  {
+    id: 'ayush_shallya',
+    name: 'Shalakya & Shalya / शालाक्य व शल्य',
+    mode: 'ayush',
+    iconType: 'eye',
+    branchLabel: 'ENT, Eye & Procedures',
+    subtitle: 'Netra roga (Eye care), ENT, Ksharasutra & Agnikarma',
+    badgeBg: 'bg-[#EEF1F7]',
+    badgeText: 'text-[#3E5280]',
+  },
+];
+
+export const I18N_PROMPTS: Record<string, Record<string, string>> = {
+  hi: {
+    welcome: 'मेडीकियोस्क में आपका स्वागत है। अपनी भाषा चुनें और अपनी स्वास्थ्य समस्या बताएं।',
+    welcomeSub: 'डॉक्टर से मिलने से पहले अपनी बीमारी की पूरी जानकारी और पुरानी पर्चियां यहाँ दर्ज करें।',
+    abhaScan: 'अपना 14-अंकों का आभा (ABHA) नंबर दर्ज करें या क्यूआर कोड स्कैन करें',
+    consentNotice: 'डिजिटल व्यक्तिगत डेटा संरक्षण (DPDPA 2023) और आयुष्मान भारत (ABDM) के तहत आपकी जानकारी सुरक्षित है।',
+    audioPromptConsent: 'आपकी आवाज़ और रिकॉर्ड्स केवल आपकी ओपीडी पर्ची तैयार करने और डॉक्टर को दिखाने के लिए उपयोग किए जाएंगे। क्या आप सहमत हैं?',
+    speakPrompt: 'माइक दबाकर बोलें या नीचे दिए गए विकल्पों पर टैप करें...',
+    chiefComplaintQ: 'आज आपको मुख्य रूप से क्या परेशानी या तकलीफ हो रही है?',
+    scanningPrompt: 'अपनी पुरानी डॉक्टर की पर्चियां, खून की जांच या डिस्चार्ज रिपोर्ट कैमरे के सामने रखें या अपलोड करें।',
+    redFlagWarning: 'आपातकालीन चेतावनी: आपके लक्षणों में तत्काल ध्यान देने की आवश्यकता है। कृपया तुरंत आपातकालीन कक्ष (कैजुअल्टी) संपर्क करें!',
+    receiptTitle: 'ओपीडी क्लिनिकल सारांश पर्ची तैयार है',
+  },
+  en: {
+    welcome: 'Welcome to MediKiosk. Select your language and record your clinical history.',
+    welcomeSub: 'Digitize prior prescriptions, reports, and record structured history before meeting the physician.',
+    abhaScan: 'Enter your 14-digit ABHA ID or Scan ABHA QR Code',
+    consentNotice: 'Protected under Digital Personal Data Protection Act 2023 & Ayushman Bharat Digital Mission (ABDM).',
+    audioPromptConsent: 'Your voice narration and scanned medical records will be processed securely to prepare a doctor-ready intake summary. Do you grant consent?',
+    speakPrompt: 'Tap microphone to speak naturally or touch one of the buttons below...',
+    chiefComplaintQ: 'What is your main presenting complaint or health problem today?',
+    scanningPrompt: 'Hold or upload your physical prescriptions, laboratory reports, or hospital summaries.',
+    redFlagWarning: 'EMERGENCY RED-FLAG: Severe critical symptoms detected! Immediate triage redirection to emergency desk required.',
+    receiptTitle: 'OPD Clinical Intake Summary Generated',
+  },
+  bn: {
+    welcome: 'মেডিকিওস্কে স্বাগতম। আপনার ভাষা নির্বাচন করুন এবং আপনার স্বাস্থ্য সমস্যা জানান।',
+    welcomeSub: 'ডাক্তারের সাথে দেখা করার আগে আপনার পুরানো প্রেসক্রিপশন ও রিপোর্ট ডিজিটাইজ করুন।',
+    abhaScan: 'আপনার ১৪ সংখ্যার আভা (ABHA) আইডি দিন বা কিউআর কোড স্ক্যান করুন',
+    consentNotice: 'DPDPA ২০২৩ এবং ABDM নির্দেশিকা অনুসারে আপনার তথ্য সুরক্ষিত।',
+    audioPromptConsent: 'আপনার ভয়েস এবং মেডিকেল রিপোর্ট শুধুমাত্র ডাক্তারকে সারসংক্ষেপ দেখানোর জন্য ব্যবহার করা হবে। আপনি কি সম্মত?',
+    speakPrompt: 'কথা বলতে মাইকে চাপুন অথবা নিচের বিকল্পগুলি স্পর্শ করুন...',
+    chiefComplaintQ: 'আজ আপনার প্রধান সমস্যা বা অসুবিধা কী?',
+    scanningPrompt: 'আপনার পুরানো প্রেসক্রিপশন বা ল্যাব রিপোর্ট স্ক্যান করুন।',
+    redFlagWarning: 'জরুরী সতর্কতা: আপনার লক্ষণে তাত্ক্ষণিক চিকিৎসার প্রয়োজন। অবিলম্বে ইমার্জেন্সি ডেস্কে যান!',
+    receiptTitle: 'ওপিডি ক্লিনিকাল সামারি প্রস্তুত',
+  },
+  ta: {
+    welcome: 'மெடிகியோஸ்க்கிற்கு நல்வரவு. உங்கள் மொழியைத் தேர்ந்தெடுத்து மருத்துவ விபரங்களைப் பதிவு செய்யவும்.',
+    welcomeSub: 'மருத்துவரைச் சந்திப்பதற்கு முன் முந்தைய சீட்டுகள் மற்றும் பரிசோதனை அறிக்கைகளை பதிவேற்றவும்.',
+    abhaScan: 'உங்கள் 14 இலக்க ABHA ஐடியை உள்ளிடவும்',
+    consentNotice: 'DPDPA 2023 மற்றும் ABDM சட்டத்தின் கீழ் உங்கள் தரவு பாதுகாப்பானது.',
+    audioPromptConsent: 'உங்கள் குரல் மற்றும் ஆவணங்கள் மருத்துவரின் குறிப்புக்காக மட்டுமே பயன்படுத்தப்படும். ஒப்புக்கொள்கிறீர்களா?',
+    speakPrompt: 'பேச மைக்ரோஃபோனைத் தொடவும் அல்லது பொத்தான்களைத் தேர்ந்தெடுக்கவும்...',
+    chiefComplaintQ: 'இன்று உங்கள் முக்கிய உடல்நலப் பிரச்சினை என்ன?',
+    scanningPrompt: 'மருத்துவர் சீட்டுகள் அல்லது ரத்தப் பரிசோதனை தாள்களை வைக்கவும்.',
+    redFlagWarning: 'அவசர எச்சரிக்கை: உடனடி தீவிர சிகிச்சை தேவைப்படும் அறிகுறிகள் உள்ளன!',
+    receiptTitle: 'OPD மருத்துவ சுருக்கம் தயாராக உள்ளது',
+  },
+  te: {
+    welcome: 'మెడికియోస్క్‌కు స్వాగతం. మీ భాషను ఎంచుకుని మీ ఆరోగ్య సమస్యను చెప్పండి.',
+    welcomeSub: 'వైద్యుడిని కలవడానికి ముందే మీ పాత ప్రిస్క్రిప్షన్లు మరియు రిపోర్టులను డిజిటలైజ్ చేయండి.',
+    abhaScan: 'మీ 14 అంకెల ABHA నంబర్ నమోదు చేయండి',
+    consentNotice: 'DPDPA 2023 మరియు ABDM నిబంధనల ప్రకారం మీ సమాచారం సురక్షితం.',
+    audioPromptConsent: 'మీ వాయిస్ మరియు రికార్డులు డాక్టర్ కోసం క్లినికల్ సారాంశం తయారు చేయడానికి మాత్రమే ఉపయోగించబడతాయి.',
+    speakPrompt: 'మాట్లాడటానికి మైక్ నొక్కండి లేదా క్రింది బటన్లను తాకండి...',
+    chiefComplaintQ: 'ఈ రోజు మీ ప్రధాన ఆరోగ్య సమస్య ఏమిటి?',
+    scanningPrompt: 'పాత ప్రిస్క్రిప్షన్లు లేదా ల్యాబ్ రిపోర్టులను అప్‌లోడ్ చేయండి.',
+    redFlagWarning: 'ఎమర్జెన్సీ రెడ్-ఫ్లాగ్: అత్యవసర చికిత్స అవసరం!',
+    receiptTitle: 'OPD క్లినికల్ సారాంశం సిద్ధమైంది',
+  },
+  mr: {
+    welcome: 'मेडीकिओस्क मध्ये आपले स्वागत आहे. आपली भाषा निवडा आणि आरोग्याची तक्रार सांगा.',
+    welcomeSub: 'डॉक्टरांना भेटण्यापूर्वी जुन्या पावत्या आणि तपासणी अहवाल डिजिटाईज करा.',
+    abhaScan: 'तुमचा १४ अंकी ABHA नंबर प्रविष्ट करा',
+    consentNotice: 'DPDPA २०२३ आणि ABDM नुसार आपली माहिती पूर्णपणे सुरक्षित आहे.',
+    audioPromptConsent: 'आपला आवाज व कागदपत्रे केवळ डॉक्टरांच्या संदर्भासाठी वापरली जातील. आपली संमती आहे का?',
+    speakPrompt: 'बोलण्यासाठी माईक दाबा किंवा खालील पर्यायांवर टॅप करा...',
+    chiefComplaintQ: 'आज आपल्याला प्रामुख्याने काय त्रास होत आहे?',
+    scanningPrompt: 'जुनी प्रिस्क्रिप्शन किंवा रक्त तपासणी रिपोर्ट स्कॅन करा.',
+    redFlagWarning: 'तातडीचा इशारा: त्वरित इमर्जन्सी कक्षात संपर्क साधा!',
+    receiptTitle: 'ओपीडी क्लिनिकल सारांश तयार आहे',
+  },
+  gu: {
+    welcome: 'મેડિકિયોસ્કમાં આપનું સ્વાગત છે. તમારી ભાષા પસંદ કરો અને તમારી સમસ્યા જણાવો.',
+    welcomeSub: 'ડોક્ટરને મળતા પહેલા જૂની દવાઓની ચિઠ્ઠી અને લેબ રિપોર્ટ ડિજિટાઇઝ કરો.',
+    abhaScan: 'તમારો ૧૪ અંકનો ABHA નંબર દાખલ કરો',
+    consentNotice: 'DPDPA ૨૦૨૩ અને ABDM અનુસાર તમારો ડેટા સુરક્ષિત છે.',
+    audioPromptConsent: 'તમારો અવાજ અને અહેવાલો ફક્ત ડોક્ટરના ઉપયોગ માટે તૈયાર કરાશે.',
+    speakPrompt: 'બોલવા માટે માઇક દબાવો અથવા નીચે આપેલા વિકલ્પો પસંદ કરો...',
+    chiefComplaintQ: 'આજે તમને મુખ્યત્વે શું તકલીફ થઈ રહી છે?',
+    scanningPrompt: 'જૂની દવાની ચિઠ્ઠી અથવા લોહીના રિપોર્ટ અહીં સ્કેન કરો.',
+    redFlagWarning: 'ઈમરજન્સી ચેતવણી: તાત્કાલિક સારવારની જરૂર છે!',
+    receiptTitle: 'ઓપીડી ક્લિનિકલ સારાંશ તૈયાર છે',
+  },
+};
+
+export const COMMON_COMPLAINTS_PRESETS = [
+  {
+    id: 'chest_pain',
+    label: 'Chest Pain / छाती में दर्द',
+    dept: 'cardio',
+    icon: 'Heart',
+    redFlagPotential: true,
+    chips: ['Crushing pain in center', 'Left arm heaviness', 'Shortness of breath', 'Sweating profusely', 'Acidity like burning'],
+  },
+  {
+    id: 'fever_cough',
+    label: 'High Fever & Cough / तेज बुखार व खांसी',
+    dept: 'gen_med',
+    icon: 'Thermometer',
+    redFlagPotential: false,
+    chips: ['Fever > 4 days', 'Chills & body ache', 'Productive yellow sputum', 'Breathlessness on walking'],
+  },
+  {
+    id: 'diabetes_hypertension',
+    label: 'Diabetes & BP Follow-up / शुगर व बीपी जांच',
+    dept: 'gen_med',
+    icon: 'Activity',
+    redFlagPotential: false,
+    chips: ['High fasting sugar (200+)', 'Giddiness / dizziness', 'Frequent urination at night', 'Swelling in feet'],
+  },
+  {
+    id: 'stomach_digestive',
+    label: 'Abdominal Pain & Digestion / पेट दर्द व अपच',
+    dept: 'gastro',
+    icon: 'Stomach',
+    redFlagPotential: false,
+    chips: ['Upper burning after food', 'Vomiting sensation', 'Constipation for 3 days', 'Bloating & gas'],
+  },
+  {
+    id: 'joint_pain',
+    label: 'Joint & Back Pain / जोड़ों व कमर का दर्द',
+    dept: 'ortho',
+    icon: 'Bone',
+    redFlagPotential: false,
+    chips: ['Knee stiffness in morning', 'Lower back radiating to leg', 'Swelling in small joints', 'Difficulty climbing stairs'],
+  },
+  {
+    id: 'ayush_amavata',
+    label: 'Sandhivata / Amavata (Ayurvedic Joint & Digestion)',
+    dept: 'ayush_kaya',
+    icon: 'Sparkles',
+    redFlagPotential: false,
+    chips: ['Morning stiffness > 1 hour', 'Heaviness in stomach (Aama)', 'Loss of appetite (Mandagni)', 'Constipation with dry stool'],
+  },
+];
+
+// Sample Medical Documents for demonstration
+export const SAMPLE_DOCUMENTS: DigitizedDocument[] = [
+  {
+    id: 'doc_sample_1',
+    fileName: 'Govt_Hospital_OPD_Prescription_Handwritten.jpg',
+    docType: 'prescription',
+    documentDate: '2025-11-14',
+    hospitalOrClinic: 'District Civil Hospital, Rohtak (Medicine OPD)',
+    isHandwritten: true,
+    abnormalFlagsCount: 1,
+    thumbnailUrl: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=600&q=80',
+    ocrRawText: `DR. RAJESH SHARMA, MD (Medicine) - Govt Civil Hospital OPD
+Reg No: C-49102 | Date: 14/11/2025 | Patient: Ramesh Kumar, 54/M
+Dx: T2DM (Type 2 Diabetes) uncontrolled + Essential HTN (Stage 1)
+Rx:
+1. Tab Metformin 500 mg - 1 tab twice daily after meals (1-0-1) x 3 months
+2. Tab Telmisartan 40 mg - 1 tab morning empty stomach (1-0-0) x 3 months
+3. Tab Pantoprazole 40 mg - 1 tab before breakfast if gastric upset
+Adv: Check HbA1c, Fasting & PP Blood Sugar, Serum Creatinine, Urine Albumin.
+Review in 3 months with reports. Salt restriction & daily walk 30 mins.`,
+    extractedDiagnoses: ['Type 2 Diabetes Mellitus (uncontrolled)', 'Essential Hypertension (Stage 1)'],
+    extractedMedications: [
+      { drugName: 'Metformin', dosage: '500 mg', frequency: '1-0-1 (Twice daily after meals)', duration: '3 months', route: 'Oral' },
+      { drugName: 'Telmisartan', dosage: '40 mg', frequency: '1-0-0 (Morning)', duration: '3 months', route: 'Oral' },
+      { drugName: 'Pantoprazole', dosage: '40 mg', frequency: 'SOS Before breakfast', duration: 'As needed', route: 'Oral' },
+    ],
+    extractedLabs: [],
+    extractedProcedures: ['Dietary lifestyle counseling', 'Salt restriction advice'],
+  },
+  {
+    id: 'doc_sample_2',
+    fileName: 'Dr_Lal_Pathlabs_Biochemistry_Report.pdf',
+    docType: 'lab_report',
+    documentDate: '2026-01-20',
+    hospitalOrClinic: 'Apex Diagnostic Reference Laboratory, New Delhi',
+    isHandwritten: false,
+    abnormalFlagsCount: 3,
+    thumbnailUrl: 'https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=600&q=80',
+    ocrRawText: `APEX PATHOLOGY LABORATORY - NABL ACCREDITED
+Patient: Ramesh Kumar | Age/Sex: 54 Y / Male | Ref Dr: Self / Govt Hospital
+Collection Date: 20-Jan-2026 08:30 AM | Report Date: 20-Jan-2026 04:15 PM
+
+BIOCHEMISTRY INVESTIGATION PANEL:
+Test Name              Observed Value    Unit       Biological Reference Range   Flag
+--------------------------------------------------------------------------------------
+Fasting Blood Sugar    194.0             mg/dL      70.0 - 100.0                 HIGH
+HbA1c (Glycated Hb)    9.4               %          < 5.7 (Good Control: < 7.0)  CRITICAL HIGH
+Estimated Avg Glucose  223               mg/dL      --                           HIGH
+Serum Creatinine       1.75              mg/dL      0.7 - 1.2                    HIGH (Impaired GFR)
+Blood Urea Nitrogen    38.0              mg/dL      7.0 - 20.0                   HIGH
+Serum Potassium        4.8               mEq/L      3.5 - 5.1                    NORMAL
+Serum Sodium           139               mEq/L      136 - 145                    NORMAL
+Urine Microalbumin     112               mg/L       < 30.0                       HIGH (Microalbuminuria)
+
+Comment: Diabetic Nephropathy screening advised. HbA1c suggests prolonged poor glycemic control.`,
+    extractedDiagnoses: ['Diabetic Nephropathy Stage 2 risk', 'Poor glycemic control (HbA1c 9.4%)'],
+    extractedMedications: [],
+    extractedLabs: [
+      { testName: 'HbA1c', value: '9.4', numericValue: 9.4, unit: '%', referenceRange: '< 5.7 %', isAbnormal: true, status: 'CRITICAL', flagNote: 'Severe hyperglycemia over past 90 days' },
+      { testName: 'Fasting Blood Sugar', value: '194', numericValue: 194, unit: 'mg/dL', referenceRange: '70 - 100 mg/dL', isAbnormal: true, status: 'HIGH', flagNote: 'Markedly elevated fasting' },
+      { testName: 'Serum Creatinine', value: '1.75', numericValue: 1.75, unit: 'mg/dL', referenceRange: '0.7 - 1.2 mg/dL', isAbnormal: true, status: 'HIGH', flagNote: 'Early renal compromise / reduced eGFR' },
+      { testName: 'Blood Urea Nitrogen', value: '38', numericValue: 38, unit: 'mg/dL', referenceRange: '7 - 20 mg/dL', isAbnormal: true, status: 'HIGH' },
+      { testName: 'Urine Microalbumin', value: '112', numericValue: 112, unit: 'mg/L', referenceRange: '< 30 mg/L', isAbnormal: true, status: 'HIGH', flagNote: 'Positive for early diabetic nephropathy' },
+      { testName: 'Serum Potassium', value: '4.8', numericValue: 4.8, unit: 'mEq/L', referenceRange: '3.5 - 5.1 mEq/L', isAbnormal: false, status: 'NORMAL' },
+    ],
+    extractedProcedures: ['Renal function evaluation recommended'],
+  },
+  {
+    id: 'doc_sample_3',
+    fileName: 'AIIMS_Cardiology_Discharge_Summary.pdf',
+    docType: 'discharge_summary',
+    documentDate: '2024-03-12',
+    hospitalOrClinic: 'All India Institute of Medical Sciences (AIIMS), New Delhi',
+    isHandwritten: false,
+    abnormalFlagsCount: 1,
+    thumbnailUrl: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=600&q=80',
+    ocrRawText: `ALL INDIA INSTITUTE OF MEDICAL SCIENCES, NEW DELHI
+DEPARTMENT OF CARDIOLOGY - DISCHARGE SUMMARY
+IPD No: C-9021-24 | CR No: 2024003912 | Date of Admission: 08-Mar-2024 | Date of Discharge: 12-Mar-2024
+Patient Name: Ramesh Kumar | Age: 52 Years | Sex: Male
+FINAL DIAGNOSIS:
+Acute Coronary Syndrome (NSTEMI) | Single Vessel Coronary Artery Disease (LAD 90% Stenosis)
+PROCEDURE PERFORMED:
+Percutaneous Coronary Intervention (PTCA) with Drug-Eluting Stent (DES) to proximal LAD on 09-Mar-2024.
+Post-procedure course uneventful. LVEF at discharge: 50%.
+DISCHARGE MEDICATIONS:
+1. Tab Aspirin 75 mg OD
+2. Tab Ticagrelor 90 mg BD
+3. Tab Atorvastatin 40 mg HS
+4. Tab Metoprolol Succinate 25 mg OD
+WARNING SIGNS: Report to Emergency immediately in case of recurrent chest pressure, dyspnea, or cold sweats.`,
+    extractedDiagnoses: ['Coronary Artery Disease (CAD)', 'Post-PTCA Stenting to Proximal LAD (2024)', 'Hypertension'],
+    extractedMedications: [
+      { drugName: 'Aspirin', dosage: '75 mg', frequency: '1-0-0', route: 'Oral' },
+      { drugName: 'Ticagrelor', dosage: '90 mg', frequency: '1-0-1', route: 'Oral' },
+      { drugName: 'Atorvastatin', dosage: '40 mg', frequency: '0-0-1 (Night)', route: 'Oral' },
+      { drugName: 'Metoprolol Succinate', dosage: '25 mg', frequency: '1-0-0', route: 'Oral' },
+    ],
+    extractedLabs: [
+      { testName: 'LVEF (Echocardiogram)', value: '50%', unit: '%', referenceRange: '> 55%', isAbnormal: true, status: 'LOW', flagNote: 'Mild LV systolic dysfunction' },
+    ],
+    extractedProcedures: ['PTCA + DES to Proximal LAD (09-Mar-2024)'],
+  },
+];
+
+// Pre-seeded patients for the Physician OPD Queue
+export const INITIAL_OPD_QUEUE: OPDQueueItem[] = [
+  {
+    id: 'q_001',
+    patient: {
+      abhaId: '91-4402-9182-3341',
+      fullName: 'Sunita Devi',
+      age: 62,
+      gender: 'Female',
+      phone: '+91 98112 34509',
+      language: 'hi',
+      selectedDepartment: 'Cardiology / हृदय रोग',
+      clinicalMode: 'allopathy',
+      tokenNumber: 'CARD-042',
+      registrationDate: '2026-09-07 08:45',
+    },
+    consent: {
+      granted: true,
+      grantedAt: '2026-09-07 08:47',
+      audioConsentPlayed: true,
+      dpdpaCompliant: true,
+      purposes: ['OPD Triage', 'HIS Integration', 'ABDM Health Locker Linkage'],
+      revocable: true,
+    },
+    triage: {
+      isEmergency: true,
+      severity: 'RED',
+      triggerPhrase: 'Acute retrosternal chest tightness with profuse sweating & radiating pain to left shoulder',
+      reason: 'Red-Flag: Suspected Acute Coronary Syndrome (ACS) with autonomic symptoms.',
+      recommendedAction: 'IMMEDIATE PRIORITY TRIAGE: Transfer patient to Emergency ECG Room / Red Bed without queuing.',
+      detectedAt: '08:52 AM',
+    },
+    history: {
+      chiefComplaints: [
+        { complaint: 'Heavy pressure and squeezing pain in chest', duration: 'Since 3 hours', severity: '8/10' },
+        { complaint: 'Sweating and breathlessness while resting', duration: 'Since 2 hours', severity: 'Severe' },
+      ],
+      hpi: {
+        site: 'Retrosternal (center of chest)',
+        onset: 'Sudden onset while sitting at home at 6:00 AM',
+        character: 'Heavy compressive squeezing, like a stone on chest',
+        radiation: 'Radiating to left shoulder, inner arm, and jaw',
+        associations: ['Cold diaphoresis (profuse sweating)', 'Shortness of breath on lying flat', 'Nausea'],
+        timingDuration: 'Constant for 3 hours, unremitting',
+        exacerbatingRelieving: 'Not relieved by rest or drinking water',
+        severityScale: 8,
+      },
+      hpiNarrative: '62-year-old female presents with 3-hour history of acute heavy central chest pressure radiating to left arm and jaw, accompanied by cold sweats and dyspnea. No relief with rest.',
+      pastMedicalHistory: ['Hypertension (5 years on irregular meds)', 'Dyslipidemia'],
+      pastSurgicalHistory: ['Tubectomy (1995)'],
+      currentMedications: ['Amlodipine 5mg (frequently skipped)'],
+      drugAllergies: ['None known'],
+      familyHistory: ['Father suffered fatal heart attack at age 58'],
+      personalLifestyle: {
+        smoking: 'Non-smoker',
+        alcohol: 'Nil',
+        diet: 'Vegetarian',
+        occupation: 'Homemaker',
+        sleep: 'Disturbed past 2 nights',
+      },
+      reviewOfSystems: {
+        Cardiovascular: ['Chest pain', 'Diaphoresis', 'Palpitations'],
+        Respiratory: ['Dyspnea'],
+        Gastrointestinal: ['Nausea'],
+      },
+    },
+    documents: [],
+    summary: {
+      patientId: '91-4402-9182-3341',
+      tokenNumber: 'CARD-042',
+      generatedAt: '2026-09-07 08:52',
+      triage: {
+        isEmergency: true,
+        severity: 'RED',
+        reason: 'CRITICAL: Acute Chest Pain with Radiating Pain and Diaphoresis',
+        recommendedAction: 'Immediate ECG and Troponin T; Casualty Alert Sent.',
+      },
+      chiefComplaintSummary: 'Severe retrosternal squeezing chest pain (8/10) with left jaw/arm radiation & cold diaphoresis x 3 hours.',
+      hpiFormatted: 'Sudden onset unremitting crushing chest pain with autonomic symptoms in a hypertensive female with strong paternal family history of CAD.',
+      pastHistorySummary: 'Hypertension (5 years, poorly compliant). No prior angiogram.',
+      medicationAndAllergySummary: 'Current: Tab Amlodipine 5mg OD. No known drug allergies.',
+      reviewOfSystemsSummary: 'Positive for chest pain, diaphoresis, dyspnea, nausea. Negative for cough, fever, syncope.',
+      digitizedRecordsSummary: 'No prior records scanned at kiosk.',
+      abnormalValuesList: ['Vitals at Kiosk: Pulse 108/min, BP 168/96 mmHg (Elevated)'],
+      potentialDrugInteractions: ['None identified'],
+      physicianNotes: 'Draft generated by MediKiosk AI. Emergency protocol triggered.',
+      physicianConfirmed: false,
+    },
+    status: 'PRIORITY_EMERGENCY',
+    submittedAt: '2026-09-07 08:52',
+  },
+  {
+    id: 'q_002',
+    patient: {
+      abhaId: '91-8273-1928-4421',
+      fullName: 'Ramesh Kumar',
+      age: 54,
+      gender: 'Male',
+      phone: '+91 94160 88219',
+      language: 'en',
+      selectedDepartment: 'General Medicine / आंतरिक चिकित्सा',
+      clinicalMode: 'allopathy',
+      tokenNumber: 'MED-108',
+      registrationDate: '2026-09-07 09:10',
+    },
+    consent: {
+      granted: true,
+      grantedAt: '2026-09-07 09:12',
+      audioConsentPlayed: true,
+      dpdpaCompliant: true,
+      purposes: ['OPD History Taking', 'Document OCR', 'ABDM Interoperability'],
+      revocable: true,
+    },
+    triage: {
+      isEmergency: false,
+      severity: 'YELLOW',
+      reason: 'Urgent Routine: Uncontrolled Diabetes with Elevated Creatinine (1.75 mg/dL) & Past Stent history.',
+      recommendedAction: 'Prioritize for Nephropathy review and glycemic adjustment.',
+    },
+    history: {
+      chiefComplaints: [
+        { complaint: 'Frequent urination at night (Nocturia 4-5 times)', duration: 'Past 2 months', severity: 'Moderate' },
+        { complaint: 'Tingling and burning numbness in both feet', duration: 'Past 3 months', severity: 'Mild-to-moderate' },
+        { complaint: 'Easy fatigability and lethargy', duration: 'Past 1 month', severity: 'Moderate' },
+      ],
+      hpi: {
+        site: 'Bilateral feet soles & toes',
+        onset: 'Gradual progressive numbness over past 3 months',
+        character: 'Pins and needles sensation, burning sensation worse at night',
+        radiation: 'Stocking distribution up to ankles',
+        associations: ['Nocturia', 'Mild bilateral pedal edema in evenings'],
+        timingDuration: 'Constant, worse when resting in bed',
+        exacerbatingRelieving: 'Worse at night; walking gives mild temporary relief',
+        severityScale: 5,
+      },
+      hpiNarrative: '54-year-old male with 8-year history of T2DM presents with symptomatic peripheral neuropathy, nocturia, and lethargy. High fasting glucose reported at home.',
+      pastMedicalHistory: ['T2DM x 8 years', 'Hypertension x 6 years', 'CAD s/p PTCA with DES to LAD (March 2024 at AIIMS)'],
+      pastSurgicalHistory: ['Coronary Angioplasty with Stent (2024)'],
+      currentMedications: [
+        'Tab Metformin 500mg BD',
+        'Tab Telmisartan 40mg OD',
+        'Tab Aspirin 75mg OD',
+        'Tab Atorvastatin 40mg HS',
+      ],
+      drugAllergies: ['Sulfa drugs (causes maculopapular rash)'],
+      familyHistory: ['Mother had diabetes and chronic kidney disease on dialysis'],
+      personalLifestyle: {
+        smoking: 'Former smoker (quit in 2024 after heart stent)',
+        alcohol: 'Occasional',
+        diet: 'Non-vegetarian (frequent sweets despite diabetes)',
+        occupation: 'Shopkeeper / Sedentary',
+        sleep: 'Broken sleep due to nocturia',
+      },
+      reviewOfSystems: {
+        Neurological: ['Peripheral numbness', 'Burning sensation in feet'],
+        Renal_Urinary: ['Nocturia 4x'],
+        Cardiovascular: ['No active chest pain', 'No paroxysmal nocturnal dyspnea'],
+      },
+    },
+    documents: [SAMPLE_DOCUMENTS[0], SAMPLE_DOCUMENTS[1], SAMPLE_DOCUMENTS[2]],
+    summary: {
+      patientId: '91-8273-1928-4421',
+      tokenNumber: 'MED-108',
+      generatedAt: '2026-09-07 09:25',
+      triage: {
+        isEmergency: false,
+        severity: 'YELLOW',
+        reason: 'Marked Hyperglycemia + Early Diabetic Nephropathy (Creatinine 1.75)',
+        recommendedAction: 'Adjust oral hypoglycemics; check eGFR; foot exam.',
+      },
+      chiefComplaintSummary: 'Nocturia (4x/night), bilateral stocking paresthesia, and fatigue in known T2DM/HTN/post-PTCA patient.',
+      hpiFormatted: 'Gradual onset diabetic sensory polyneuropathy with persistent uncontrolled hyperglycemia and early microvascular complications.',
+      pastHistorySummary: 'T2DM (8 yrs), HTN (6 yrs), CAD s/p PTCA LAD stent (AIIMS 2024, LVEF 50%). No prior DKA.',
+      medicationAndAllergySummary: 'Metformin 500 BD, Telmisartan 40 OD, Aspirin 75 OD, Atorvastatin 40 HS. ALLERGY: Sulfa Drugs (rash).',
+      reviewOfSystemsSummary: 'Positive for bilateral feet burning, nocturia. Negative for chest pain, shortness of breath, visual blurring.',
+      digitizedRecordsSummary: '3 documents OCR processed: (1) Govt Civil Hospital Rx 14/11/2025; (2) Apex Labs 20/01/2026 showing HbA1c 9.4%, S. Creatinine 1.75, Microalbumin 112; (3) AIIMS Discharge 12/03/2024 PTCA LAD.',
+      abnormalValuesList: [
+        'HbA1c: 9.4% (Target < 7.0%) - Critical Uncontrolled',
+        'Fasting Blood Sugar: 194 mg/dL',
+        'Serum Creatinine: 1.75 mg/dL (High)',
+        'Urine Microalbumin: 112 mg/L (High)',
+      ],
+      potentialDrugInteractions: [
+        'Caution: Metformin dose review needed in presence of elevated Serum Creatinine (1.75 mg/dL - risk of lactic acidosis if eGFR < 30)',
+        'Sulfa Allergy alert: Avoid sulfonylureas (Glimepiride/Gliclazide) due to documented cross-reactivity.',
+      ],
+      physicianNotes: 'Awaiting doctor consultation. Timeline prepared with 3 prior documents.',
+      physicianConfirmed: false,
+    },
+    status: 'WAITING',
+    submittedAt: '2026-09-07 09:25',
+  },
+  {
+    id: 'q_003',
+    patient: {
+      abhaId: '91-3190-7762-1104',
+      fullName: 'Aarav Shastri',
+      age: 41,
+      gender: 'Male',
+      phone: '+91 98200 11983',
+      language: 'hi',
+      selectedDepartment: 'Kayachikitsa (Internal Medicine) / कायचिकित्सा (आयुर्वेद)',
+      clinicalMode: 'ayush',
+      tokenNumber: 'AYU-019',
+      registrationDate: '2026-09-07 09:30',
+    },
+    consent: {
+      granted: true,
+      grantedAt: '2026-09-07 09:32',
+      audioConsentPlayed: true,
+      dpdpaCompliant: true,
+      purposes: ['AYUSH Dashavidha Pariksha Intake', 'HIS Electronic Records', 'ABDM Personal Health Record'],
+      revocable: true,
+    },
+    triage: {
+      isEmergency: false,
+      severity: 'GREEN',
+      reason: 'Standard OPD: Chronic Amavata (Rheumatoid presentation) with Agnimandya.',
+      recommendedAction: 'Deepana-Pachana and Vata-Kapha Shamana protocol.',
+    },
+    history: {
+      chiefComplaints: [
+        { complaint: 'Severe joint stiffness in morning lasting > 1 hour (Angamarda & Sandhishoola)', duration: '6 months', severity: 'Moderate' },
+        { complaint: 'Heaviness in abdomen and sluggish digestion (Aruchi & Vibandha)', duration: '8 months', severity: 'Moderate' },
+      ],
+      hpi: {
+        site: 'Bilateral wrist, PIP fingers, and knee joints',
+        onset: 'Insidious onset following irregular diet and day-sleeping (Divasvapna)',
+        character: 'Shooting painful aches like scorpion sting (Vrishchika Damshavat Vedana)',
+        radiation: 'Migratory from small joints to knees',
+        associations: ['Gaurava (body heaviness)', 'Alasya (lethargy)', 'Koshtha-baddhata (constipation)'],
+        timingDuration: 'Worse early morning and in cloudy weather (Sheetakala)',
+        exacerbatingRelieving: 'Aggravated by cold/curd/fermented food; relieved by warm fomentation (Svedana)',
+        severityScale: 6,
+      },
+      hpiNarrative: '41-year-old male with chronic Amavata symptoms: early morning stiffness, multiple joint pain aggravated by cold, with underlying Agnimandya and Sama lakshanas.',
+      pastMedicalHistory: ['History of chronic acidity (Amlapitta)'],
+      pastSurgicalHistory: ['None'],
+      currentMedications: ['Allopathic NSAID (Ibuprofen SOS, stopped due to gastritis)'],
+      drugAllergies: ['None known'],
+      familyHistory: ['Mother has generalized joint arthralgia'],
+      personalLifestyle: {
+        smoking: 'Nil',
+        alcohol: 'Nil',
+        diet: 'Irregular lunch timings, heavy oily dinners late night',
+        occupation: 'IT desk job (prolonged sitting 9 hours/day)',
+        sleep: 'Daytime sleeping habit (Divasvapna 1 hr), late night bedtime',
+      },
+      reviewOfSystems: {
+        Musculoskeletal: ['Morning joint stiffness', 'Swelling in wrists'],
+        Gastrointestinal: ['Sluggish appetite', 'Sticky coated tongue (Sama Jihva)'],
+      },
+      ayushAssessment: {
+        prakriti: {
+          vata: 45,
+          pitta: 35,
+          kapha: 20,
+          dominant: 'Vata-Pitta',
+        },
+        vikriti: 'Vata-Kapha with Sama Dosha (Aama accumulation)',
+        agni: 'Mandagni',
+        koshtha: 'Krura',
+        aharaShakti: 'Avara',
+        vyayamaShakti: 'Madhyama',
+        sara: 'Madhyama Asthi-Meda Sara',
+        satmya: 'Katu-Tikta Satmya',
+        sattva: 'Madhyama',
+        vaya: 'Madhyama (41 years)',
+        aharaViharaNotes: 'Frequent Guru-Snigdha Ahara (heavy oily food), Viruddha Ahara (fruit with milkshakes), Divasvapna (daytime sleeping), Vega Vidharana (suppression of natural urges).',
+      },
+    },
+    documents: [],
+    summary: {
+      patientId: '91-3190-7762-1104',
+      tokenNumber: 'AYU-019',
+      generatedAt: '2026-09-07 09:40',
+      triage: {
+        isEmergency: false,
+        severity: 'GREEN',
+        reason: 'Routine Ayurvedic Intake - Amavata with Agnimandya',
+        recommendedAction: 'Proceed with classical Dashavidha verification and Panchakarma assessment.',
+      },
+      chiefComplaintSummary: 'Morning joint stiffness (>1 hr), multiple symmetrical joint tenderness, abdominal heaviness and Mandagni x 6 months.',
+      hpiFormatted: 'Classical Amavata presentation (Nidana: Divasvapna, Viruddha Ahara, Snigdha Bhojana leading to Rasa Dhatvagni-mandya and Aama accumulation in Sandhis).',
+      pastHistorySummary: 'Prior Amlapitta. NSAID intolerance.',
+      medicationAndAllergySummary: 'Currently taking no active medications. Nil drug allergies.',
+      reviewOfSystemsSummary: 'Positive for Sandhishoola, Gaurava, Aruchi, Vibandha.',
+      ayushSummary: 'Dashavidha Pariksha: Prakriti: Vata-Pitta | Vikriti: Vata-Kapha (Sama) | Agni: Mandagni | Koshtha: Krura | Ahara Shakti: Avara | Vyayama: Madhyama. Nidana includes Guru-Snigdha Ahara & Divasvapna.',
+      digitizedRecordsSummary: 'No prior external records attached.',
+      abnormalValuesList: ['Clinical: Coated tongue (Sama Jihva), Tenderness over both wrists & MCPs.'],
+      potentialDrugInteractions: ['None'],
+      physicianNotes: 'Ayurvedic Dashavidha history structured and ready for Vaidya review.',
+      physicianConfirmed: false,
+    },
+    status: 'WAITING',
+    submittedAt: '2026-09-07 09:40',
+  },
+];
+
+export const INITIAL_HOSPITAL_FACILITY = {
+  name: 'Govt. Medical College & Apex AYUSH Institute',
+  hfrId: 'HFR-IN-DL-98217',
+  facilityType: 'Apex Multi-Speciality Teaching & AYUSH Tertiary Hospital',
+  state: 'Delhi (NCT)',
+  district: 'Central Delhi',
+  emergencyHelpline: '102 / 011-26598800',
+  ambulanceContact: '108',
+  bedInventory: [
+    {
+      id: 'bed_gen',
+      name: 'General Ward Beds',
+      total: 420,
+      available: 68,
+      occupied: 352,
+      unit: 'Beds',
+      type: 'general' as const,
+    },
+    {
+      id: 'bed_icu',
+      name: 'ICU & Critical Care Units',
+      total: 64,
+      available: 8,
+      occupied: 56,
+      unit: 'Beds',
+      type: 'icu' as const,
+    },
+    {
+      id: 'bed_o2',
+      name: 'High-Flow Oxygen Beds',
+      total: 120,
+      available: 24,
+      occupied: 96,
+      unit: 'Beds',
+      type: 'oxygen' as const,
+    },
+    {
+      id: 'bed_trauma',
+      name: 'Emergency Trauma / Red Bay',
+      total: 30,
+      available: 6,
+      occupied: 24,
+      unit: 'Beds',
+      type: 'trauma' as const,
+    },
+    {
+      id: 'bed_ped',
+      name: 'Pediatric & NICU / PICU',
+      total: 50,
+      available: 12,
+      occupied: 38,
+      unit: 'Beds',
+      type: 'pediatric' as const,
+    },
+  ],
+  doctors: [
+    {
+      id: 'doc_1',
+      name: 'Dr. Rajesh Sharma, MD',
+      department: 'General Medicine / आंतरिक चिकित्सा',
+      speciality: 'Internal Medicine & Diabetology',
+      roomNumber: 'OPD Room 104',
+      status: 'On Duty' as const,
+      opdTimings: '09:00 AM - 02:00 PM',
+      phoneOrExt: 'Ext 104',
+    },
+    {
+      id: 'doc_2',
+      name: 'Dr. Priya Venkatesh, DM',
+      department: 'Cardiology / हृदय रोग',
+      speciality: 'Interventional Cardiology',
+      roomNumber: 'OPD Room 208',
+      status: 'On Duty' as const,
+      opdTimings: '08:30 AM - 01:30 PM',
+      phoneOrExt: 'Ext 208',
+    },
+    {
+      id: 'doc_3',
+      name: 'Vaidya Ananya Vats, MD (Ayu)',
+      department: 'Kayachikitsa (Internal Medicine) / कायचिकित्सा (आयुर्वेद)',
+      speciality: 'Panchakarma & Metabolic Disorders',
+      roomNumber: 'AYUSH Wing Room 12',
+      status: 'On Duty' as const,
+      opdTimings: '09:30 AM - 03:00 PM',
+      phoneOrExt: 'Ext 312',
+    },
+    {
+      id: 'doc_4',
+      name: 'Dr. Amitav Sen, MS',
+      department: 'Orthopaedics & Joint Care / अस्थि रोग',
+      speciality: 'Joint Replacement & Trauma',
+      roomNumber: 'OPD Room 115',
+      status: 'In Surgery' as const,
+      opdTimings: '11:00 AM - 04:00 PM',
+      phoneOrExt: 'Ext 115',
+    },
+    {
+      id: 'doc_5',
+      name: 'Dr. Sunita Patel, MD',
+      department: 'Pulmonary Medicine & TB / श्वसन रोग',
+      speciality: 'Chest Medicine & Asthma',
+      roomNumber: 'OPD Room 202',
+      status: 'On Duty' as const,
+      opdTimings: '09:00 AM - 01:00 PM',
+      phoneOrExt: 'Ext 202',
+    },
+    {
+      id: 'doc_6',
+      name: 'Vaidya Harishankar Joshi, BAMS',
+      department: 'Panchakarma Therapy / पंचकर्म चिकित्सा',
+      speciality: 'Ayurvedic Detoxification',
+      roomNumber: 'AYUSH Wing Room 08',
+      status: 'On Duty' as const,
+      opdTimings: '10:00 AM - 04:00 PM',
+      phoneOrExt: 'Ext 308',
+    },
+  ],
+  treatmentsAvailable: [
+    '24x7 Emergency Resuscitation & Trauma Casualty',
+    'Interventional Cardiology Cath Lab & Angioplasty',
+    'Hemodialysis & Acute Renal Replacement Unit (18 Machines)',
+    'AYUSH Classical Panchakarma & Shirodhara Detoxification',
+    '128-Slice High Speed CT Scan & 3.0T MRI Imaging',
+    'Advanced Diabetic Foot & Glycemic Evaluation Clinic',
+    'Level-3 Neonatal & Pediatric Intensive Care (NICU/PICU)',
+    'Joint Replacement & Arthroscopic Day Surgery',
+    'Day Care Chemotherapy & Oncology Infusion Bay',
+  ],
+  lastUpdatedBy: 'Facility Administrator (OPD Central Desk)',
+  lastUpdatedAt: 'Just now',
+};
+
+export const SAMPLE_STAFF_USERS = [
+  {
+    id: 'staff_1',
+    staffId: 'STAFF-ADMIN-901',
+    name: 'Dr. Alok Verma, MHA',
+    role: 'Facility Administrator' as const,
+    department: 'Hospital Administration & Resource Operations',
+    email: 'admin.operations@hospital.gov.in',
+  },
+  {
+    id: 'staff_2',
+    staffId: 'DOC-MED-441',
+    name: 'Dr. Rajesh Sharma, MD',
+    role: 'Consulting Physician' as const,
+    department: 'General Medicine / Internal Medicine',
+    email: 'dr.sharma@hospital.gov.in',
+  },
+  {
+    id: 'staff_3',
+    staffId: 'NURSE-SUP-112',
+    name: 'Sister Mary Thomas, MSc',
+    role: 'OPD In-Charge / Supervisor' as const,
+    department: 'OPD Central Triage & Nursing Station',
+    email: 'opd.supervisor@hospital.gov.in',
+  },
+];

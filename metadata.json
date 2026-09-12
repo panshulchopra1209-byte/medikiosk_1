@@ -1,0 +1,11 @@
+{
+  "name": "Remix Medikiosk ",
+  "description": "AI-powered multimodal clinical intake kiosk for Indian OPDs and AYUSH institutions with multilingual voice, document OCR, red-flag triage, and ABDM/ABHA integration.",
+  "requestFramePermissions": [
+    "microphone",
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

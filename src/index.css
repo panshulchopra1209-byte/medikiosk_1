@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+:root {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color-scheme: light;
+  letter-spacing: -0.012em;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.024em;
+  font-weight: 700;
+}
+
+.font-editorial {
+  font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.018em;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.font-serif-elegant {
+  font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.015em;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.font-sans-refined {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+body {
+  background-color: #F8F6F1;
+  color: #2D2621;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+@layer utilities {
+  /* Subtle medical background grid */
+  .medical-subtle-grid {
+    background-image: radial-gradient(rgba(62, 91, 71, 0.08) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Subtle glassmorphism and enhanced depth for tabs and floating cards */
+  .tab-card-active {
+    background: #FFFFFF;
+    color: #1E1915;
+    box-shadow: 0 4px 14px -2px rgba(62, 91, 71, 0.14), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+    border: 1px solid #D5CCC0;
+  }
+  
+  .tab-card-inactive {
+    color: #6C5E52;
+    background: transparent;
+    border: 1px solid transparent;
+  }
+  
+  .tab-card-inactive:hover {
+    color: #18130F;
+    background: #EAE2D5;
+    box-shadow: 0 4px 12px -2px rgba(140, 93, 57, 0.08);
+    font-weight: 700;
+  }
+
+  .interactive-card {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .interactive-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -4px rgba(45, 38, 33, 0.08);
+  }
+
+  .subtle-ring-focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(62, 91, 71, 0.2);
+  }
+
+  /* Clinical Glass and Header elevation */
+  .clinical-header-glass {
+    backdrop-filter: blur(8px);
+    background-color: rgba(250, 248, 245, 0.94);
+  }
+
+  .clinical-card {
+    background-color: #FFFFFF;
+    border: 1px solid #EAE3D7;
+    box-shadow: 0 2px 8px -2px rgba(45, 38, 33, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+    border-radius: 1rem;
+    transition: all 0.2s ease;
+  }
+
+  .clinical-card:hover {
+    border-color: #D6CBC0;
+    box-shadow: 0 6px 20px -4px rgba(45, 38, 33, 0.07);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.02);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2.4s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #bed-allotment-confirmation-slip,
+  #bed-allotment-confirmation-slip * {
+    visibility: visible;
+  }
+  #bed-allotment-confirmation-slip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 24px;
+    box-shadow: none !important;
+    border: 1px solid #999 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
